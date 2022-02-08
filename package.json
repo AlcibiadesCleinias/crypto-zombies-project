@@ -1,0 +1,27 @@
+{
+  "name": "solidity-on-truffle-template",
+  "version": "1.0.0",
+  "description": "# Develop",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whynft/nft-gift-button-contract.git"
+  },
+  "keywords": [
+    "solidity",
+    "truffle"
+  ],
+  "author": "WhyNft",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlcibiadesCleinias/solidity-on-truffle-template/issues"
+  },
+  "homepage": "https://github.com/AlcibiadesCleinias/solidity-on-truffle-template/",
+  "dependencies": {
+    "dotenv": "16.0.0",
+    "@truffle/hdwallet-provider": "^2.0.3"
+  }
+}
