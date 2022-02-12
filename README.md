@@ -31,12 +31,12 @@ run tests and etc with truffle. I suppose you will use **Run & Connect** bash-in
 
 ## Build:
 ```bash
-docker build -t truffle-sol-dev -f Dockerfile .
+docker build -t zombie-sol-dev -f Dockerfile .
 ```
 
 ## Run & Connect:
 ```bash
-docker run --rm -v $(pwd):/opt -it --entrypoint bash truffle-sol-dev
+docker run --rm -v $(pwd):/opt -it --entrypoint bash zombie-sol-dev
 ```
 Now you are ready to develop project and use truffle (compile, test, deploy), npm.
 
