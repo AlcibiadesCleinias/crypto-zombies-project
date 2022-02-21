@@ -1,13 +1,13 @@
 const { expectRevert } = require('@openzeppelin/test-helpers')
 
-const ZombieFactory = artifacts.require("ZombieFactory");
+const ZombieFactoryOnChainlink = artifacts.require("ZombieFactoryOnChainlink");
 const VRFCoordinatorMock = artifacts.require('VRFCoordinatorMock')
 const LinkToken = artifacts.require('LinkToken');
 
 const zombieNames = ["Zombie 1", "Zombie 2"];
 
 
-contract("ZombieFactory", (accounts) => {
+contract("ZombieFactoryOnChainlink", (accounts) => {
     let [alice, bob, backend, defaultAccount] = accounts;
     let contractInstance;
     let keyhash, fee, link, vrfCoordinatorMock
@@ -18,7 +18,7 @@ contract("ZombieFactory", (accounts) => {
         link = await LinkToken.new({ from: defaultAccount })
         vrfCoordinatorMock = await VRFCoordinatorMock.new(link.address, { from: defaultAccount })
 
-        contractInstance = await ZombieFactory.new(link.address, keyhash, vrfCoordinatorMock.address, fee, { from: defaultAccount });
+        contractInstance = await ZombieFactoryOnChainlink.new(link.address, keyhash, vrfCoordinatorMock.address, fee, { from: defaultAccount });
     });
     // afterEach(async () => {
     //    await contractInstance.kill(); if implemented in ProjectContract
@@ -48,7 +48,7 @@ contract("ZombieFactory", (accounts) => {
         await _generateRandomZombieWithAsserts(alice, '777')
     })
 
-    it('Should not allow to request to generate 2 random zombie for 1 user', async () => {
+    it('Should not allow to request to generate 2 random zombies for 1 user', async () => {
         await link.transfer(contractInstance.address, web3.utils.toWei('2', 'ether'), { from: defaultAccount })
 
         let transaction = await contractInstance.createRandomZombieRequest(zombieNames[0], {from: alice})
@@ -57,7 +57,7 @@ contract("ZombieFactory", (accounts) => {
         await expectRevert.unspecified(contractInstance.createRandomZombieRequest(zombieNames[0], {from: alice}))
     })
 
-    it('Should create 2 random zombies per 2 users', async () => {
+    it('Should allow to create 2 random zombies per 2 users', async () => {
         await _generateRandomZombieWithAsserts(alice, '777')
         await _generateRandomZombieWithAsserts(bob, '771')
         const pastEvents = await contractInstance.getPastEvents('NewZombie',  {fromBlock: 0, toBlock: 'latest'});

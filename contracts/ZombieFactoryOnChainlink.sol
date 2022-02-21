@@ -9,13 +9,13 @@ import "./SafeMathCustom.sol";
 
 
 /**
-* @title Basic contract to create a random zombie.
+* @title Contract to create a random zombie with Chainlink feature.
 * @dev There are 2 steps/methods:
 * @dev 1. createRandomZombieRequest - to request ChainLink for randomness
 * @dev this method also stops user from
 * @dev 2. fulfillRandomness - chainlink push its random and thus mint zombie, event emitted
 */
-contract ZombieFactory is Ownable, VRFConsumerBase {
+contract ZombieFactoryOnChainlink is Ownable, VRFConsumerBase {
 
   using SafeMathChainlink for uint256;
   using SafeMath32Custom for uint32;
@@ -74,7 +74,6 @@ contract ZombieFactory is Ownable, VRFConsumerBase {
     emit NewZombie(id, _zombieName, _dna);
   }
 
-//  ---
   mapping(bytes32 => address) public requestIdToAddress;
   /// @dev By below we also track an initiated request of zombie creation.
   mapping(address => string) private addressToRandomZombieNameRequested;
