@@ -1,6 +1,6 @@
 const { expectRevert } = require('@openzeppelin/test-helpers')
 
-const ZombieFactoryOnChainlink = artifacts.require("ZombieFactoryOnChainlink");
+const ZombieFactoryOnChainlink = artifacts.require("ZombieFactoryOnChainlink");  // todo: test final contract
 const VRFCoordinatorMock = artifacts.require('VRFCoordinatorMock')
 const LinkToken = artifacts.require('LinkToken');
 
@@ -20,9 +20,10 @@ contract("ZombieFactoryOnChainlink", (accounts) => {
 
         contractInstance = await ZombieFactoryOnChainlink.new(link.address, keyhash, vrfCoordinatorMock.address, fee, { from: defaultAccount });
     });
-    // afterEach(async () => {
-    //    await contractInstance.kill(); if implemented in ProjectContract
-    // });
+
+    afterEach(async () => {
+       await contractInstance.kill({from: defaultAccount});
+    });
 
     it('Should revert without LINK', async () => {
         await expectRevert.unspecified(

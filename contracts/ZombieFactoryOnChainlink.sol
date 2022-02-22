@@ -9,7 +9,7 @@ import "./SafeMathCustom.sol";
 
 
 /**
-* @title Contract to create a random zombie with Chainlink feature.
+* @title Contract to create a random zombie with Chainlink random.
 * @dev There are 2 steps/methods:
 * @dev 1. createRandomZombieRequest - to request ChainLink for randomness
 * @dev this method also stops user from
@@ -101,6 +101,10 @@ contract ZombieFactoryOnChainlink is Ownable, VRFConsumerBase {
     uint randDna = _generateRandomDna(zombieName, randomness);
     randDna = randDna - randDna % 100;
     _createZombie(requestAddress, zombieName, randDna);
+  }
+
+  function kill() public onlyOwner {
+    selfdestruct(msg.sender);
   }
 
 }
