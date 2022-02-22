@@ -1,0 +1,14 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "Tiny frontend for cryptoZombies contract",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server -a localhost -o /"
+  },
+  "author": "AlciabiadesCleinias",
+  "license": "MIT",
+  "dependencies": {
+    "http-server": "^14.1.0"
+  }
+}
