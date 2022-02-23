@@ -2,7 +2,6 @@ name: CI for Contract with Truffle
 
 on:
   pull_request:
-    branches-ignore: [ main ]
   workflow_dispatch:
 
 jobs:
