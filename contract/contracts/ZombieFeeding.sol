@@ -26,6 +26,9 @@ contract ZombieFeeding is ZombieFactoryOnChainlink {
     _;
   }
 
+  /*
+  * @dev: Even if no change in parent contract constructor should be repeated.
+  */
   constructor(address _linkTokenAddress, bytes32 _keyHash,
     address _vrfCoordinatorAddress, uint256 _fee)
       public
