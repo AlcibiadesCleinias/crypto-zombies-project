@@ -20,7 +20,7 @@
 require('dotenv').config();
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
-const solidityCompilerVersion = process.env.SOLIDITY_COMPILER_VERSION || "0.8.11"
+const solidityCompilerVersion = process.env.SOLIDITY_COMPILER_VERSION || "0.6.6"
 
 module.exports = {
   /**
