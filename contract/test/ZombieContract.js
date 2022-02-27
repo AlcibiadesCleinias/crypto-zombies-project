@@ -1,4 +1,5 @@
 const { expectRevert } = require('@openzeppelin/test-helpers')
+const time = require("./utils/time");
 
 const ZombieContract = artifacts.require("ZombieFeeding");  // todo: test final contract
 const VRFCoordinatorMock = artifacts.require('VRFCoordinatorMock')
@@ -6,6 +7,8 @@ const LinkToken = artifacts.require('LinkToken');
 const KittyFake = artifacts.require('KittyFake');
 
 const zombieNames = ["Zombie 1", "Zombie 2"];
+
+const zombieOnKittyDnaIndicator = 99;
 
 
 contract("ZombieContract", (accounts) => {
@@ -86,19 +89,25 @@ contract("ZombieContract", (accounts) => {
             let transaction = await contractInstance.setKittyContractAddress(kittyFakeInstance.address, {from: defaultAccount})
             assert.equal(transaction.receipt.status, true, "Kitty contract address should be set from backend")
 
-            transaction = await contractInstance.feedOnKitty(createdZombieId, 999, {from: alice })
+            await time.increase(time.duration.days(1));
+            transaction = await contractInstance.feedOnKitty(createdZombieId, 9, {from: alice })
             assert.equal(transaction.receipt.status, true)
 
             pastEvents = await contractInstance.getPastEvents('NewZombie',  {fromBlock: 0, toBlock: 'latest'});
-            // todo: how to navigate to exact last event
-            const zombieFeededOnKittyDna = pastEvents[-1].returnValues.dna
+            const zombieFeededOnKittyDna = pastEvents[pastEvents.length - 1].returnValues.dna
             console.log(zombieFeededOnKittyDna)
-            assert.equal(true, false, "Last digits of dna for feeded on kitty should be 99")
+            assert.equal(
+                zombieFeededOnKittyDna % 100,
+                zombieOnKittyDnaIndicator,
+                "Last digits of dna for feeded on kitty should be 99"
+            )
         })
 
-        it('Should not allow to feed on kitty twice for 1 zombie', async () => {
+        xit('Should not allow to feed on kitty twice for 1 zombie', async () => {
             // todo
         })
+    })
+
 
     })
 })
