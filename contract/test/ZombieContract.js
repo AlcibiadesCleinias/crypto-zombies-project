@@ -95,7 +95,6 @@ contract("ZombieContract", (accounts) => {
 
             pastEvents = await contractInstance.getPastEvents('NewZombie',  {fromBlock: 0, toBlock: 'latest'});
             const zombieFeededOnKittyDna = pastEvents[pastEvents.length - 1].returnValues.dna
-            console.log(zombieFeededOnKittyDna)
             assert.equal(
                 zombieFeededOnKittyDna % 100,
                 zombieOnKittyDnaIndicator,
@@ -109,5 +108,20 @@ contract("ZombieContract", (accounts) => {
     })
 
 
+    xcontext("Checks for ZombieHelper part", async () => {
+        it('Should return all zombies of user', async () => {
+            await _generateRandomZombieWithAsserts(alice, '777')
+            await _generateRandomZombieWithAsserts(bob, '771')
+            let pastEvents = await contractInstance.getPastEvents('NewZombie',  {fromBlock: 0, toBlock: 'latest'});
+            const zombieIdOfAlice = pastEvents[0].returnValues.zombieId
+            const zombieIdOfBob = pastEvents[1].returnValues.zombieId
+
+            const transaction = await contractInstance.getZombiesByOwner(alice, {from: bob})
+            assert.equal(transaction.receipt.status, true)
+            console.log(transaction.logs[0].args)  // todo: test
+            assert.equal(transaction.logs[0].args.length, 1)
+            assert.equal(transaction.logs[0].args[0].zombieId, zombieIdOfAlice)
+
+        })
     })
 })
