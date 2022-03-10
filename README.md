@@ -10,5 +10,12 @@ The project was composed according to cryptoZombie solidity course: https://cryp
 - may use Kitty Contract to feed zombie. Created zombie by kitty feeding are marked by 99 at the end of DNA
 
 # Contract
-Before start contract owner should define kitty contract address with `setKittyContractAddress`
+
+## Before Start 
+- contract owner should define kitty contract address with `setKittyContractAddress`
+- on contract should be enough Link for ChainLink Oracles
+
+# Frontend
+I left as simple frontend as possible. Kinda 1 html file.
+
 
