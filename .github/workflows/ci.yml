@@ -2,7 +2,6 @@ name: CI for Contract with Truffle
 
 on:
   pull_request:
-    branches-ignore: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -29,7 +28,9 @@ jobs:
         run: npm install truffle -g
 
       - name: Install Dependencies
+        working-directory: contract
         run: npm install
 
       - name: Run Truffle Test
+        working-directory: contract
         run: truffle test

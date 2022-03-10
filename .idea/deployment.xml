@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="aws-develop-5k" deleteMissingItems="true" preserveFilePermissions="true" autoUploadExternalChanges="true">
+    <serverData>
+      <paths name="aws-develop-5k">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/opt/crypto-zombies-project" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath path="/opt/crypto-zombies-project/contract/node_modules" />
+            <excludedPath local="true" path="$PROJECT_DIR$/.idea" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>

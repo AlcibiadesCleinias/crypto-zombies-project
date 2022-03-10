@@ -26,6 +26,9 @@ contract ZombieFeeding is ZombieFactoryOnChainlink {
     _;
   }
 
+  /*
+  * @dev: Even if no change in parent contract constructor should be repeated.
+  */
   constructor(address _linkTokenAddress, bytes32 _keyHash,
     address _vrfCoordinatorAddress, uint256 _fee)
       public
@@ -47,7 +50,7 @@ contract ZombieFeeding is ZombieFactoryOnChainlink {
 
   function feedAndMultiply(uint _zombieId, uint _targetDna, string memory _species) internal onlyOwnerOf(_zombieId) {
     Zombie storage myZombie = zombies[_zombieId];
-    require(_isReady(myZombie));
+    require(_isReady(myZombie), "Zombie is not ready for feeding - cooldown.");
     _targetDna = _targetDna % dnaModulus;
     uint newDna = (myZombie.dna + _targetDna) / 2;
     if (keccak256(abi.encodePacked(_species)) == keccak256(abi.encodePacked("kitty"))) {
