@@ -1,4 +1,4 @@
-const ZombieFactory = artifacts.require("./ZombieFactoryOnChainlink.sol");
+const ZombieFactory = artifacts.require("./ZombieHelper.sol");
 
 module.exports = function(deployer, network) {
   if (!network.startsWith('rinkeby')) {

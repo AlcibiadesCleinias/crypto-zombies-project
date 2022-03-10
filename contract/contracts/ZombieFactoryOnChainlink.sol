@@ -21,7 +21,7 @@ contract ZombieFactoryOnChainlink is Ownable, VRFConsumerBase {
   using SafeMath32Custom for uint32;
   using SafeMath16Custom for uint16;
 
-  event NewZombie(uint zombieId, string name, uint dna);
+  event NewZombie(uint zombieId, string name, uint dna, address owner);
   event CreateRandomZombieRequest(bytes32 requestId, string zombieName);
 
   bytes32 public keyHash;
@@ -71,7 +71,7 @@ contract ZombieFactoryOnChainlink is Ownable, VRFConsumerBase {
     uint id = zombies.length - 1;
     zombieToOwner[id] = _zombieOwner;
     ownerZombieCount[_zombieOwner] = ownerZombieCount[_zombieOwner].add(1);
-    emit NewZombie(id, _zombieName, _dna);
+    emit NewZombie(id, _zombieName, _dna, _zombieOwner);
   }
 
   mapping(bytes32 => address) public requestIdToAddress;
