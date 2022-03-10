@@ -81,7 +81,7 @@ contract ZombieFactoryOnChainlink is Ownable, VRFConsumerBase {
   /// @dev The first part of random zombie creation.
   function createRandomZombieRequest(string memory _zombieName) public {
     require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK - fill contract with faucet");
-    require(ownerZombieCount[msg.sender] == 0, "Only one zombie could be requested to create with this method.");
+    require(ownerZombieCount[msg.sender] == 0, "Only one first zombie could be requested to create with this method.");
     require(bytes(addressToRandomZombieNameRequested[msg.sender]).length == 0, "Only 1 request to create a random zombie may exist");
     bytes32 _requestId =  requestRandomness(keyHash, fee);
     requestIdToAddress[_requestId] = msg.sender;
