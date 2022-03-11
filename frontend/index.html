@@ -124,6 +124,8 @@
         let userHtml = "";
         let currentZombiesHtml= "";
         let createRandomZombieHtml = "";
+        let zombieManagementHtml = "";
+        let zombieContractAdminHtml = "";
         const target = document.querySelector("#app");
 
         if (accounts.length && isMetaMaskLoggedInCookie()) {  // check both: metamask provider readiness & that user want to be logged in
@@ -167,8 +169,8 @@
           `;
           createRandomZombieHtml = `
             <div class="container">
-              <h1>Create You First Zombie</h1>
-              <div class="info">You start game with first random zombie. Choose a name!</div>
+              <h1>The First Zombie</h1>
+              <div class="info">You may start game with the first random zombie. Choose a name!</div>
               <form onsubmit="handleCreateRandomZombie(event)">
                 <input type="text" name="zombieName" class="full-width" required="required" placeholder="Your zombie name"/>
                 <button id="btn-create-random-zombie" type="submit">Create random zombie</button>
@@ -181,20 +183,90 @@
               <div class="info" id="renderedZombies">Loading...</div>
             </div>
           `;
+          zombieManagementHtml = `
+            <div class="container">
+              <h1>Zombie Management</h1>
+              <div class="info">...todo...</div>
+            </div>
+          `;
+          zombieContractAdminHtml = `
+            <div class="container">
+              <h1>Contract Administrator</h1>
+              <div class="info">If you are an administrator you may manage the game with commands below.</div>
+              <form onsubmit="handleSetKittyContractAddress(event)">
+                <input type="text" name="kittyContractAddress" class="full-width" required="required" placeholder="Kitty Contract Address"/>
+                <button id="btn-setKittyContractAddress" type="submit">Set</button>
+              </form>
+              <form onsubmit="handleSetLevelUpFee(event)">
+                <input type="text" name="feeValue" class="full-width" required="required" placeholder="Fee Value"/>
+                <button id="btn-setLevelUpFee" type="submit">Set</button>
+              </form>
+            </div>
+          `;
         }
         target.innerHTML =
-          userHtml + createRandomZombieHtml + currentZombiesHtml + authHtml;
+          userHtml + createRandomZombieHtml + currentZombiesHtml + zombieManagementHtml + zombieContractAdminHtml + authHtml;
 
         // ---- start functions ----
         getZombiesByOwner(currentUserAddressGlobal).then(displayZombies);
       };
 
 
+      // ---- Zombie handlers ----
+      const handleSetLevelUpFee = async (e) => {
+        e.preventDefault();
+        const feeValue = new FormData(e.target).get("feeValue");
+
+        if (cryptoZombiesContractGlobal && currentUserAddressGlobal && feeValue) {
+          const btnSendTxn = document.getElementById("btn-setLevelUpFee");
+          btnSendTxn.disabled = true;
+          btnSendTxn.innerText = "Setting...";
+
+          await cryptoZombiesContractGlobal.methods
+            .setLevelUpFee(feeValue)
+            .send({
+              from: currentUserAddressGlobal,
+              gas: 1500000,
+              gasPrice: '30000000000'})  // todo
+            .on("receipt", function(receipt) {
+              console.log("Set");
+            })
+            .on("error", function(error) {
+              console.log("Transaction error:" + error);
+            });
+          render();
+        }
+      }
+
+      const handleSetKittyContractAddress = async (e) => {
+        e.preventDefault();
+        const kittyContractAddress = new FormData(e.target).get("kittyContractAddress");
+
+        if (cryptoZombiesContractGlobal && currentUserAddressGlobal && kittyContractAddress) {
+          const btnSendTxn = document.getElementById("btn-setKittyContractAddress");
+          btnSendTxn.disabled = true;
+          btnSendTxn.innerText = "Setting...";
+
+          await cryptoZombiesContractGlobal.methods
+            .setKittyContractAddress(kittyContractAddress)
+            .send({
+              from: currentUserAddressGlobal,
+              gas: 1500000,
+              gasPrice: '30000000000'})  // todo
+            .on("receipt", function(receipt) {
+              console.log("Set");
+            })
+            .on("error", function(error) {
+              console.log("Transaction error:" + error);
+            });
+          render();
+        }
+      }
+
       const handleCreateRandomZombie = async (e) => {
         e.preventDefault();
         const zombieName = new FormData(e.target).get("zombieName");
         console.log(zombieName)
-        console.log(cryptoZombiesContractGlobal)
         console.log(currentUserAddressGlobal)
 
         if (cryptoZombiesContractGlobal && currentUserAddressGlobal && zombieName) {
@@ -210,7 +282,6 @@
               gasPrice: '30000000000'})  // todo
             .on("receipt", function(receipt) {
               console.log("Chain accepted creation, wait for oracles for randomizing...");
-              // getZombiesByOwner(userAccount).then(displayZombies);
             })
             .on("error", function(error) {
               console.log("Transaction error:" + error);
@@ -220,6 +291,7 @@
         }
       }
 
+      // ---- common handlers ----
       const handleLogin = async () => {
         await loginWithMetaMask();
         render()
