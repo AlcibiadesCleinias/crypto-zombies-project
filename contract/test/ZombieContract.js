@@ -1,7 +1,7 @@
 const { expectRevert } = require('@openzeppelin/test-helpers')
 const time = require("./utils/time");
 
-const ZombieContract = artifacts.require("ZombieFeeding");  // todo: test final contract
+const ZombieContract = artifacts.require("ZombieHelper");  // todo: test final contract
 const VRFCoordinatorMock = artifacts.require('VRFCoordinatorMock')
 const LinkToken = artifacts.require('LinkToken');
 const KittyFake = artifacts.require('KittyFake');
@@ -108,20 +108,21 @@ contract("ZombieContract", (accounts) => {
     })
 
 
-    xcontext("Checks for ZombieHelper part", async () => {
-        it('Should return all zombies of user', async () => {
+    context("Checks for ZombieHelper part", async () => {
+        it('Should return all zombies per user', async () => {
             await _generateRandomZombieWithAsserts(alice, '777')
             await _generateRandomZombieWithAsserts(bob, '771')
             let pastEvents = await contractInstance.getPastEvents('NewZombie',  {fromBlock: 0, toBlock: 'latest'});
             const zombieIdOfAlice = pastEvents[0].returnValues.zombieId
             const zombieIdOfBob = pastEvents[1].returnValues.zombieId
 
-            const transaction = await contractInstance.getZombiesByOwner(alice, {from: bob})
-            assert.equal(transaction.receipt.status, true)
-            console.log(transaction.logs[0].args)  // todo: test
-            assert.equal(transaction.logs[0].args.length, 1)
-            assert.equal(transaction.logs[0].args[0].zombieId, zombieIdOfAlice)
+            const aliceZombies = await contractInstance.getZombiesByOwner(alice, {from: bob})
+            const bobZombies = await contractInstance.getZombiesByOwner(bob, {from: bob})
 
+            assert.equal(aliceZombies.length, 1)
+            assert.equal(bobZombies.length, 1)
+            assert.equal(aliceZombies[0].words[0], zombieIdOfAlice)
+            assert.equal(bobZombies[0].words[0], zombieIdOfBob)
         })
     })
 })
