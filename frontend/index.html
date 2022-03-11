@@ -172,7 +172,7 @@
           createRandomZombieHtml = `
             <div class="container">
               <h1>The First Zombie</h1>
-              <div class="info">You may start game with the first random zombie. Choose a name!</div>
+              <div class="info">You may start game with the first random zombie. Merely choose a name and wait for oracles to mint the random zombie!</div>
               <form onsubmit="handleCreateRandomZombie(event)">
                 <input type="text" name="zombieName" class="full-width" required="required" placeholder="Your zombie name"/>
                 <button id="btn-create-random-zombie" type="submit">Create random zombie</button>
@@ -193,6 +193,17 @@
                 <input type="text" name="zombieId" class="full-width" required="required" placeholder="Zombie Id"/>
                 <input type="text" name="kittyId" class="full-width" required="required" placeholder="Kitty Id"/>
                 <button id="btn-feedOnKitty" type="submit">Feed</button>
+              </form>
+              <div class="info">Change a name for your zombie.</div>
+              <form onsubmit="handleChangeName(event)">
+                <input type="text" name="zombieId" class="full-width" required="required" placeholder="Zombie Id"/>
+                <input type="text" name="name" class="full-width" required="required" placeholder="New Name"/>
+                <button id="btn-changeName" type="submit">Change</button>
+              </form>
+              <div class="info">Level up your zombie with some eth to make him even stronger.</div>
+              <form onsubmit="handleLevelUp(event)">
+                <input type="text" name="zombieId" class="full-width" required="required" placeholder="Zombie Id"/>
+                <button id="btn-levelUp" type="submit">Level Up</button>
               </form>
             </div>
           `;
@@ -220,6 +231,61 @@
 
 
       // ---- Zombie handlers ----
+      const handleLevelUp = async (e) => {
+        e.preventDefault();
+        const zombieId = new FormData(e.target).get("zombieId");
+
+        if (cryptoZombiesContractGlobal && currentUserAddressGlobal && zombieId) {
+          const btnSendTxn = document.getElementById("btn-levelUp");
+          btnSendTxn.disabled = true;
+          btnSendTxn.innerText = "Up up up...";
+
+          const valueWei = await cryptoZombiesContractGlobal.methods.fee().call();
+          console.log('value ', valueWei)
+
+          await cryptoZombiesContractGlobal.methods
+            .levelUp(zombieId)
+            .send({
+              value: "100000000000000000",
+              from: currentUserAddressGlobal,
+              gas: 1500000,
+              gasPrice: '30000000000'})
+            .on("receipt", function(receipt) {
+              console.log("Set");
+            })
+            .on("error", function(error) {
+              console.log("Transaction error:" + error);
+            });
+          render();
+        }
+      }
+
+      const handleChangeName = async (e) => {
+        e.preventDefault();
+        const newName = new FormData(e.target).get("name");
+        const zombieId = new FormData(e.target).get("zombieId");
+
+        if (cryptoZombiesContractGlobal && currentUserAddressGlobal && zombieId && newName) {
+          const btnSendTxn = document.getElementById("btn-changeName");
+          btnSendTxn.disabled = true;
+          btnSendTxn.innerText = "Changing...";
+
+          await cryptoZombiesContractGlobal.methods
+            .changeName(zombieId, newName)
+            .send({
+              from: currentUserAddressGlobal,
+              gas: 1500000,
+              gasPrice: '30000000000'})
+            .on("receipt", function(receipt) {
+              console.log("Set");
+            })
+            .on("error", function(error) {
+              console.log("Transaction error:" + error);
+            });
+          render();
+        }
+      }
+
       const handleFeedOnKitty = async (e) => {
         e.preventDefault();
         const kittyId = new FormData(e.target).get("kittyId");

@@ -32,7 +32,7 @@ contract ZombieHelper is ZombieFeeding {
   }
 
   function levelUp(uint _zombieId) external payable {
-    require(msg.value == levelUpFee);
+    require(msg.value >= levelUpFee, "Not enough eth to level up");
     zombies[_zombieId].level = zombies[_zombieId].level.add(1);
   }
 
