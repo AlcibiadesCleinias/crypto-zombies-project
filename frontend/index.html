@@ -219,13 +219,17 @@
                 <input type="text" name="feeValue" class="full-width" required="required" placeholder="Fee Value"/>
                 <button id="btn-setLevelUpFee" type="submit">Set</button>
               </form>
+              <div class="info">Take a profit from the game.</div>
+              <form onsubmit="handleWithdraw(event)">
+                <button id="btn-withdraw" type="submit">Withdraw</button>
+              </form>
             </div>
           `;
         }
         target.innerHTML =
           userHtml + createRandomZombieHtml + currentZombiesHtml + zombieManagementHtml + zombieContractAdminHtml + authHtml;
 
-        // ---- start functions ----
+        // ---- start functions, i.e. from zombie course no corrections ----
         getZombiesByOwner(currentUserAddressGlobal).then(displayZombies);
       };
 
@@ -251,7 +255,7 @@
               gas: 1500000,
               gasPrice: '30000000000'})
             .on("receipt", function(receipt) {
-              console.log("Set");
+              console.log("Success");
             })
             .on("error", function(error) {
               console.log("Transaction error:" + error);
@@ -277,7 +281,7 @@
               gas: 1500000,
               gasPrice: '30000000000'})
             .on("receipt", function(receipt) {
-              console.log("Set");
+              console.log("Success");
             })
             .on("error", function(error) {
               console.log("Transaction error:" + error);
@@ -303,13 +307,34 @@
               gas: 1500000,
               gasPrice: '30000000000'})
             .on("receipt", function(receipt) {
-              console.log("Set");
+              console.log("Success");
             })
             .on("error", function(error) {
               console.log("Transaction error:" + error);
             });
           render();
         }
+      }
+
+      const handleWithdraw = async (e) => {
+        e.preventDefault();
+        const btnSendTxn = document.getElementById("btn-withdraw");
+        btnSendTxn.disabled = true;
+        btnSendTxn.innerText = "Withdrawing...";
+
+        await cryptoZombiesContractGlobal.methods
+          .withdraw()
+          .send({
+            from: currentUserAddressGlobal,
+            gas: 1500000,
+            gasPrice: '30000000000'})
+          .on("receipt", function(receipt) {
+            console.log("Success");
+          })
+          .on("error", function(error) {
+            console.log("Transaction error:" + error);
+          });
+        render();
       }
 
       const handleSetLevelUpFee = async (e) => {
@@ -328,7 +353,7 @@
               gas: 1500000,
               gasPrice: '30000000000'})
             .on("receipt", function(receipt) {
-              console.log("Set");
+              console.log("Success");
             })
             .on("error", function(error) {
               console.log("Transaction error:" + error);
@@ -353,7 +378,7 @@
               gas: 1500000,
               gasPrice: '30000000000'})
             .on("receipt", function(receipt) {
-              console.log("Set");
+              console.log("Success");
             })
             .on("error", function(error) {
               console.log("Transaction error:" + error);

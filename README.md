@@ -19,4 +19,7 @@ The project was composed according to cryptoZombie solidity course: https://cryp
 # Frontend
 I left as simple frontend as possible. Kinda 1 html file.
 
+## Not Implemented
+- changeDna method
+
 
