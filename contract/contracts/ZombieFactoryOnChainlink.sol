@@ -44,6 +44,9 @@ contract ZombieFactoryOnChainlink is Ownable, VRFConsumerBase {
 
   mapping (uint => address) public zombieToOwner;
   mapping (address => uint) ownerZombieCount;
+  mapping(bytes32 => address) public requestIdToAddress;
+  /// @dev By below we also track an initiated request of zombie creation.
+  mapping(address => string) private addressToRandomZombieNameRequested;
 
   /**
   * Constructor inherits VRFConsumerBase
@@ -73,10 +76,6 @@ contract ZombieFactoryOnChainlink is Ownable, VRFConsumerBase {
     ownerZombieCount[_zombieOwner] = ownerZombieCount[_zombieOwner].add(1);
     emit NewZombie(id, _zombieName, _dna, _zombieOwner);
   }
-
-  mapping(bytes32 => address) public requestIdToAddress;
-  /// @dev By below we also track an initiated request of zombie creation.
-  mapping(address => string) private addressToRandomZombieNameRequested;
 
   /// @dev The first part of random zombie creation.
   function createRandomZombieRequest(string memory _zombieName) public {
