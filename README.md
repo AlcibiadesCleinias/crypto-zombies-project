@@ -2,6 +2,9 @@
 The project was composed according to cryptoZombie solidity course: https://cryptozombies.io/en/course.
 In contrary to course code all code in this repo is without syntax errors, workable and even covered with working tests and frontend.
 
+# Prod
+Check out the game: https://alcibiadescleinias.github.io/crypto-zombies-project/frontend/index.html
+
 # Feature
 - ChainLink oracles for randomizing: random zombie creation, random zombie fighting
 - Tests, tests, tests even with mocking ChainLink oracles
