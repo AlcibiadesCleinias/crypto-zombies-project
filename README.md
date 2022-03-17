@@ -8,6 +8,7 @@ Check out the game: https://alcibiadescleinias.github.io/crypto-zombies-project/
 
 # Feature
 - ChainLink oracles for randomizing: random zombie creation, random zombie fighting
+- MetaMask wallet
 - Tests, tests, tests even with mocking ChainLink oracles
 - Truffle suite for solidity contract developing
 - Auto testing via GitHub Actions
