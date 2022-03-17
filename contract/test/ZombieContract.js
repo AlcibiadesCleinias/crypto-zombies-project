@@ -1,7 +1,7 @@
 const { expectRevert } = require('@openzeppelin/test-helpers')
 const time = require("./utils/time");
 
-const ZombieContract = artifacts.require("ZombieHelper");  // todo: test final contract
+const ZombieContract = artifacts.require("ZombieAttack");  // todo: test final contract
 const VRFCoordinatorMock = artifacts.require('VRFCoordinatorMock')
 const LinkToken = artifacts.require('LinkToken');
 const KittyFake = artifacts.require('KittyFake');
@@ -107,7 +107,6 @@ contract("ZombieContract", (accounts) => {
         })
     })
 
-
     context("Checks for ZombieHelper part", async () => {
         it('Should return all zombies per user', async () => {
             await _generateRandomZombieWithAsserts(alice, '777')
@@ -123,6 +122,71 @@ contract("ZombieContract", (accounts) => {
             assert.equal(bobZombies.length, 1)
             assert.equal(aliceZombies[0].words[0], zombieIdOfAlice)
             assert.equal(bobZombies[0].words[0], zombieIdOfBob)
+        })
+    })
+
+    async function _aliceZombieAttacksBobZombieWithAsserts(winProbability) {
+        await link.transfer(contractInstance.address, web3.utils.toWei('1', 'ether'), { from: defaultAccount })
+
+        await _generateRandomZombieWithAsserts(alice, '777')
+        await _generateRandomZombieWithAsserts(bob, '771')
+        let pastEvents = await contractInstance.getPastEvents('NewZombie',  {fromBlock: 0, toBlock: 'latest'});
+        const zombieIdOfAlice = pastEvents[0].returnValues.zombieId
+        const zombieIdOfBob = pastEvents[1].returnValues.zombieId
+
+        await time.increase(time.duration.days(1));
+        let transaction = await contractInstance.createAttackZombieRequest(zombieIdOfAlice, zombieIdOfBob, {from: alice})
+        assert.exists(transaction.receipt.rawLogs)
+        const requestId = transaction.logs[0].args.requestId
+
+        transaction = await vrfCoordinatorMock.callBackWithRandomness(requestId, winProbability, contractInstance.address, { from: defaultAccount })
+        assert.equal(transaction.receipt.status, true)
+    }
+
+    context("Checks for ZombieAttack part", async () => {
+        it('It should win with 71 percent and create a new zombie', async () => {
+            await _aliceZombieAttacksBobZombieWithAsserts('71')
+
+            let pastEvents = await contractInstance.getPastEvents('ZombieAttackWin',  {fromBlock: 0, toBlock: 'latest'});
+            assert.equal(pastEvents.length, 1)
+            assert.equal(pastEvents[0].returnValues.isWin, true)
+
+
+            pastEvents = await contractInstance.getPastEvents('NewZombie',  {fromBlock: 0, toBlock: 'latest'});
+            assert.equal(pastEvents.length, 3)
+            assert.equal(pastEvents[2].args.name, 'NoName')
+
+            const aliceZombies = await contractInstance.getZombiesByOwner(alice, {from: bob})
+            const bobZombies = await contractInstance.getZombiesByOwner(bob, {from: bob})
+
+            assert.equal(bobZombies.length, 1)
+            assert.equal(aliceZombies.length, 2)
+        })
+
+        it('It should not win with less than 70 percent', async () => {
+            await _aliceZombieAttacksBobZombieWithAsserts('69')
+
+            let pastEvents = await contractInstance.getPastEvents('ZombieAttackWin',  {fromBlock: 0, toBlock: 'latest'});
+            assert.equal(pastEvents.length, 1)
+            assert.equal(pastEvents[0].returnValues.isWin, false)
+
+            const aliceZombies = await contractInstance.getZombiesByOwner(alice, {from: bob})
+            const bobZombies = await contractInstance.getZombiesByOwner(bob, {from: bob})
+
+            assert.equal(bobZombies.length, 1)
+            assert.equal(aliceZombies.length, 1)
+        })
+
+        it('It should throw if zombie is not ready', async () => {
+            await link.transfer(contractInstance.address, web3.utils.toWei('1', 'ether'), { from: defaultAccount })
+
+            await _generateRandomZombieWithAsserts(alice, '777')
+            await _generateRandomZombieWithAsserts(bob, '771')
+            let pastEvents = await contractInstance.getPastEvents('NewZombie',  {fromBlock: 0, toBlock: 'latest'});
+            const zombieIdOfAlice = pastEvents[0].returnValues.zombieId
+            const zombieIdOfBob = pastEvents[1].returnValues.zombieId
+
+            await expectRevert.unspecified(contractInstance.createAttackZombieRequest(zombieIdOfAlice, zombieIdOfBob, {from: alice}))
         })
     })
 })
