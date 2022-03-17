@@ -4,6 +4,7 @@ In contrary to course code all code in this repo is without syntax errors, worka
 
 # Prod
 Check out the game: https://alcibiadescleinias.github.io/crypto-zombies-project/frontend/index.html
+> The frontend is a very tiny, thus, I suppose you use chrome "dev tools" for notifications.
 
 # Feature
 - ChainLink oracles for randomizing: random zombie creation, random zombie fighting
