@@ -21,6 +21,9 @@ In contrary to course code all code in this repo is without syntax errors, worka
 # Frontend
 I left as simple frontend as possible. Kinda 1 html file.
 
+## Start
+`npm start`
+
 ## Not Implemented
 - changeDna method
 - subscription on fight win event 
