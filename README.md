@@ -1,9 +1,10 @@
 # Crypto Zombies Project
-The project was composed according to cryptoZombie solidity course: https://cryptozombies.io/en/course. 
+The project was composed according to cryptoZombie solidity course: https://cryptozombies.io/en/course.
+In contrary to course code all code in this repo is without syntax errors, workable and even covered with working tests and frontend.
 
 # Feature
-- Chainlink oracles for randomizing: random zombie creation, zombie fighting
-- Tests with mocking Chainlink
+- ChainLink oracles for randomizing: random zombie creation, random zombie fighting
+- Tests, tests, tests even with mocking ChainLink oracles
 - Truffle suite for solidity contract developing
 - Auto testing via GitHub Actions
 - Docker for contract developing
@@ -21,5 +22,8 @@ I left as simple frontend as possible. Kinda 1 html file.
 
 ## Not Implemented
 - changeDna method
+- subscription on fight win event 
+(user creates a request for fight to oracles -> oracles produces random and complete fight -> user should be notified)
+- mechanics about level, dna, win/loss counters and how these stats influences on fight and etc. 
 
 

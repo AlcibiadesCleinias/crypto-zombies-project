@@ -14,9 +14,7 @@ contract ZombieAttack is ZombieHelper {
     uint256 targetId;
   }
 
-  /// @dev if 0 -> request for new zombie creation, 1 - request for zombie fight
-//  mapping(bytes32 => uint16) private requestIdToMethod;
-  /// @dev it is possible to determine rather an attack or not via key existence
+  /// @dev To determine rather an attack or simple random zombie mint
   mapping (bytes32 => address) private requestIdOfZombiesInAttackActionToAddress;
   mapping (address => ZombiesAttackAction) private addressToZombiesAttackAction;
 
