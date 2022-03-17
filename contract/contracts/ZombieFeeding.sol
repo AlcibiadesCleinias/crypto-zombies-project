@@ -48,7 +48,7 @@ contract ZombieFeeding is ZombieFactoryOnChainlink {
       return (_zombie.readyTime <= now);
   }
 
-  function feedAndMultiply(uint _zombieId, uint _targetDna, string memory _species) internal onlyOwnerOf(_zombieId) {
+  function feedAndMultiply(uint _zombieId, uint _targetDna, address _owner, string memory _species) internal {
     Zombie storage myZombie = zombies[_zombieId];
     require(_isReady(myZombie), "Zombie is not ready for feeding - cooldown.");
     _targetDna = _targetDna % dnaModulus;
@@ -56,13 +56,13 @@ contract ZombieFeeding is ZombieFactoryOnChainlink {
     if (keccak256(abi.encodePacked(_species)) == keccak256(abi.encodePacked("kitty"))) {
       newDna = newDna - newDna % 100 + 99;
     }
-    _createZombie(msg.sender, "NoName", newDna);
+    _createZombie(_owner, "NoName", newDna);
     _triggerCooldown(myZombie);
   }
 
-  function feedOnKitty(uint _zombieId, uint _kittyId) public {
+  function feedOnKitty(uint _zombieId, uint _kittyId) external onlyOwnerOf(_zombieId) {
     uint kittyDna;
     (,,,,,,,,,kittyDna) = kittyContract.getKitty(_kittyId);
-    feedAndMultiply(_zombieId, kittyDna, "kitty");
+    feedAndMultiply(_zombieId, kittyDna, msg.sender, "kitty");
   }
 }
