@@ -31,6 +31,9 @@ I left as simple frontend as possible. Kinda 1 html file.
 - changeDna method
 - subscription on fight win event 
 (user creates a request for fight to oracles -> oracles produces random and complete fight -> user should be notified)
+
+# ToDo
 - mechanics about level, dna, win/loss counters and how these stats influences on fight and etc. 
+- and more, more
 
 
