@@ -10,12 +10,13 @@ In contrary to course code all code in this repo is without syntax errors, worka
 - Docker for contract developing
 - May use Kitty Contract to feed zombie. Created zombie by kitty feeding are marked by 99 at the end of DNA
 - After action under a zombie there is a cooldown exists (currently I left it equals to 1 min, mb better to 1 day)
+- Basic Erc721 features (on frontend only transfer is accessible, but in contract there is even more)
 
 # Contract
 
 ## Before Start 
 - contract owner should define kitty contract address with `setKittyContractAddress` (e.g. for Rinkeby: `0x16baF0dE678E52367adC69fD067E5eDd1D33e3bF`)
-- on contract should be enough Link for ChainLink Oracles
+- on contract should be enough Link for ChainLink Oracles [how to get test LINK](https://docs.chain.link/docs/acquire-link/)
 
 # Frontend
 I left as simple frontend as possible. Kinda 1 html file.

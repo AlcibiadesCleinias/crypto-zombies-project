@@ -1,4 +1,4 @@
-const ZombieFactory = artifacts.require("./ZombieAttack.sol");
+const ZombieFactory = artifacts.require("./ZombieOwnership.sol");
 
 module.exports = function(deployer, network) {
   if (!network.startsWith('rinkeby')) {

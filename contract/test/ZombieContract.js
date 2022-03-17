@@ -1,7 +1,7 @@
 const { expectRevert } = require('@openzeppelin/test-helpers')
 const time = require("./utils/time");
 
-const ZombieContract = artifacts.require("ZombieAttack");  // todo: test final contract
+const ZombieContract = artifacts.require("ZombieOwnership");
 const VRFCoordinatorMock = artifacts.require('VRFCoordinatorMock')
 const LinkToken = artifacts.require('LinkToken');
 const KittyFake = artifacts.require('KittyFake');
@@ -188,5 +188,9 @@ contract("ZombieContract", (accounts) => {
 
             await expectRevert.unspecified(contractInstance.createAttackZombieRequest(zombieIdOfAlice, zombieIdOfBob, {from: alice}))
         })
+    })
+
+    context("Checks for ZombieOwnership part [todo]", async () => {
+        // todo
     })
 })
