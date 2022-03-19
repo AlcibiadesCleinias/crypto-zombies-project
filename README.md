@@ -18,13 +18,14 @@ Check out the game: https://alcibiadescleinias.github.io/crypto-zombies-project/
 - Basic Erc721 features (on frontend only transfer is accessible, but in contract there is even more)
 
 # Contract
+In [contract/](contract) I put all contract logic on Truffle suite
 
 ## Before Start 
 - contract owner should define kitty contract address with `setKittyContractAddress` (e.g. for Rinkeby: `0x16baF0dE678E52367adC69fD067E5eDd1D33e3bF`)
 - on contract should be enough Link for ChainLink Oracles [how to get test LINK](https://docs.chain.link/docs/acquire-link/)
 
 # Frontend
-I left as simple frontend as possible. Kinda 1 html file.
+I left as simple frontend as possible in [frontend/](frontend). Kinda 1 [index.html](frontend/index.html) file to run. On develop stage use simple npm server to serve the html file
 
 ## Start
 `npm start`
