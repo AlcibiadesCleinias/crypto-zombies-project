@@ -105,6 +105,7 @@ contract ZombieFactoryOnChainlink is Ownable, VRFConsumerBase {
     uint randDna = _generateRandomDna(zombieName, randomness);
     randDna = randDna - randDna % 100;
     _createZombie(requestAddress, zombieName, randDna);
+    delete addressToRandomZombieNameRequested[msg.sender];
   }
 
   function kill() public onlyOwner {
