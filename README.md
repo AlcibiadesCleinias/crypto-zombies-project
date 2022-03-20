@@ -16,6 +16,8 @@ Check out the game: https://alcibiadescleinias.github.io/crypto-zombies-project/
 - May use Kitty Contract to feed zombie. Created zombie by kitty feeding are marked by 99 at the end of DNA
 - After action under a zombie there is a cooldown exists (currently I left it equals to 1 min, mb better to 1 day)
 - Basic Erc721 features (on frontend only transfer is accessible, but in contract there is even more)
+- change zombie name only if level above 2
+- change dna only if zombie level above 20
 
 # Contract
 In [contract/](contract) I put all contract logic on Truffle suite
